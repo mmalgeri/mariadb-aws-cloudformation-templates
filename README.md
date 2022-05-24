@@ -1,0 +1,1 @@
+# mariadb-aws-cloudformation-templates
