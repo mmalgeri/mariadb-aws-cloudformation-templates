@@ -114,7 +114,7 @@ To verify that the cluster is set up properly ssh into the maxscale node and typ
 ```bash
 $ mxctrl list servers
 ```
-You should see an output like the following:\
+You should see an output like the following:
 
 ┌─────────┬──────────────┬──────┬─────────────┬─────────────────┬─────────┐\
 │ Server  │ Address      │ Port │ Connections │ State           │ GTID    │\
