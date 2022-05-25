@@ -1,6 +1,6 @@
 # mariadb-aws-cloudformation-templates
 
-# xpand-vX.yaml - "X" is version number
+# xpand.yaml
 ## This is a template to create a 3 node xpand cluster with a maxscale node
 
 ## Prerequisites
@@ -13,9 +13,9 @@
 ## Getting started
 Set "Default"  values for all the  "Parameters" near top of template
 
-========================================================
+---
 
-# primary-replica-vX.yaml - "X" is version number
+# primary-replica.yaml
 ## This is a template to create a 3 node cluster with one primary and two replicas and a maxscale node
 
 ## Prerequisites
