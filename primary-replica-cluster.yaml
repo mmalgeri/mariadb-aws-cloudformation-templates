@@ -87,7 +87,7 @@ Resources:
             wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
             echo "Got repo and made it executable" >> /tmp/userEchos.txt
-            ./mariadb_es_repo_setup --token="98926624-ae4d-44c7-a2b1-3bde91fef652" --apply --mariadb-server-version="10.6"
+            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
             echo "Installed repo, now installing MariaDB-server" >> /tmp/userEchos.txt
             sudo yum -y install MariaDB-server
             echo "Done installing MariaDB-server" >> /tmp/userEchos.txt
@@ -199,7 +199,7 @@ Resources:
             wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
             echo "Got repo and made it executable" >> /tmp/userEchos.txt
-            ./mariadb_es_repo_setup --token="98926624-ae4d-44c7-a2b1-3bde91fef652" --apply --mariadb-server-version="10.6"
+            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
             echo "Installed repo, now installing MariaDB-server" >> /tmp/userEchos.txt
             sudo yum -y install MariaDB-server
             echo "Done installing MariaDB-server, now starting it" >> /tmp/userEchos.txt
@@ -302,7 +302,7 @@ Resources:
             wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
             echo "Got repo and made it executable" >> /tmp/userEchos.txt
-            ./mariadb_es_repo_setup --token="98926624-ae4d-44c7-a2b1-3bde91fef652" --apply --mariadb-server-version="10.6"
+            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
             echo "Installed repo, now installing MariaDB-server" >> /tmp/userEchos.txt
             sudo yum -y install MariaDB-server
             echo "Done installing MariaDB-server, now starting it" >> /tmp/userEchos.txt
