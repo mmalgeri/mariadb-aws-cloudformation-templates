@@ -2,7 +2,7 @@
 
 ### Two templates are presented
 
-The first is xpand-cluster.yaml, which launches a 3 node xpand cluster plus a maxscale node
+The first is xpand-cluster.yaml, which launches a 3 node xpand cluster plus a maxscale node\
 The second is primary-replica-cluster.yaml, which launches 1 primary, 2 replicas and 1 maxscale node
 
 ### These template require some manual changes to tokens, license, etc. 
