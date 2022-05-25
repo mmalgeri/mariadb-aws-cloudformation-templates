@@ -77,7 +77,13 @@ nid | Hostname | Status | IP Address | TPS | Used | Total\
 3 | ip-10-0-2-26  | OK | 10.0.2.26 | 0 | 14.4M (0.00%) | 994.9G\
 ----+----------------+--------+-------------+-----+----------------+--------\
 
+To delete stack run the following command
 
+```bash
+$ aws cloudformation delete-stack --stack-name *your-stack-name*
+```
+
+You may have to reset your AWS keys in your .bash_profile or Windows environment, as the keys are replenished every few hours
 
 ---
 
@@ -133,4 +139,12 @@ You should see an output like the following:
 ├─────────┼──────────────┼──────┼─────────────┼─────────────────┼─────────┤\
 │ server3 │ 172.31.42.14 │ 3306 │ 0           │ Slave, Running  │ 0-3-126 │\
 └─────────┴──────────────┴──────┴─────────────┴─────────────────┴─────────┘\
+
+To delete stack run the following command
+
+```bash
+$ aws cloudformation delete-stack --stack-name *your-stack-name*
+```
+
+You may have to reset your AWS keys in your .bash_profile or Windows environment, as the keys are replenished every few hours
 
