@@ -1,8 +1,8 @@
 # mariadb-aws-cloudformation-templates
 
-## These template require some manual changes to tokens, license, etc. 
+### These template require some manual changes to tokens, license, etc. 
 
-## TBD - Improvements can be made by storing these values outside of the template and using something like AWS code pipeline
+### TBD - Improvements can be made by storing these values outside of the template and using something like AWS code pipeline
 
 # xpand-cluster.yaml
 
