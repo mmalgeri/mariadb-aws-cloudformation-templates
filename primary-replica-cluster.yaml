@@ -74,36 +74,36 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
             #!/bin/bash
-            echo "Installing mariadb enterprise" >> /tmp/userEchos.txt
             exec > >(tee /tmp/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+            echo "Installing mariadb enterprise" 
             yum update -y
-            echo "Updated yum" >> /tmp/userEchos.txt
-            echo "get private ip address" >> /tmp/userEchos.txt
+            echo "Updated yum" 
+            echo "get private ip address" 
             ip=$(hostname -i)
-            echo "private address is " >> /tmp/userEchos.txt
-            echo $ip  >> /tmp/userEchos.txt
+            echo "private address is " 
+            echo $ip  
             sudo yum -y install wget
-            echo "Installed wget and now getting mariadb repo" >> /tmp/userEchos.txt
+            echo "Installed wget and now getting mariadb repo" 
             wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            echo "Got repo and made it executable" >> /tmp/userEchos.txt
-            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
-            echo "Installed repo, now installing MariaDB-server" >> /tmp/userEchos.txt
+            echo "Got repo and made it executable" 
+            ./mariadb_es_repo_setup --token="98926624-ae4d-44c7-a2b1-3bde91fef652" --apply --mariadb-server-version="10.6"
+            echo "Installed repo, now installing MariaDB-server" 
             sudo yum -y install MariaDB-server
-            echo "Done installing MariaDB-server" >> /tmp/userEchos.txt
+            echo "Done installing MariaDB-server" 
             sleep 10
             sudo systemctl start mariadb
             sudo systemctl enable mariadb
-            echo "Done installing, starting, and enabling MariaDB-server and installing MariaDB-backup " >> /tmp/userEchos.txt
-            echo "Modifying mysql-clients.cnf file" >> /tmp/userEchos.txt
+            echo "Done installing, starting, and enabling MariaDB-server and installing MariaDB-backup " 
+            echo "Modifying mysql-clients.cnf file" 
             sudo sed -i '4i [client]' /etc/my.cnf.d/mysql-clients.cnf
             sudo sed -i '5i password=Adm1n777#' /etc/my.cnf.d/mysql-clients.cnf
-            echo "Installing sshpass" >> /tmp/userEchos.txt
+            echo "Installing sshpass" 
             sudo yum -y install sshpass
-            echo "Stopping and disabling firewalld" >> /tmp/userEchos.txt
+            echo "Stopping and disabling firewalld" 
             sudo systemctl stop firewalld
             sudo systemctl disable firewalld 
-            echo "firewalld stopped and disabled" >> /tmp/userEchos.txt
+            echo "firewalld stopped and disabled" 
             sudo sed -i 's/\[mariadb\]//' /etc/my.cnf.d/server.cnf
             sudo echo "#### PRIMARY SERVER CONFIGURATION" >> /etc/my.cnf.d/server.cnf
             sudo echo "server_id            = 1" >> /etc/my.cnf.d/server.cnf
@@ -112,36 +112,36 @@ Resources:
             sudo echo "log-bin-index        = /var/log/mariadb/primary1-bin.index" >> /etc/my.cnf.d/server.cnf
             sudo echo "binlog_format        = ROW" >> /etc/my.cnf.d/server.cnf
             sudo echo "expire_logs_days     = 10" >> /etc/my.cnf.d/server.cnf
-            echo "Creating log directory and changing ownership to mysql" >> /tmp/userEchos.txt
+            echo "Creating log directory and changing ownership to mysql" 
             sudo mkdir /var/log/mariadb
             sudo chown -R mysql:mysql /var/log/mariadb
-            echo "Restarting mariadb after adding entries to server.cnf file" >> /tmp/userEchos.txt
+            echo "Restarting mariadb after adding entries to server.cnf file" 
             sudo systemctl restart mariadb
-            echo "Creating sql file to create repuser" >> /tmp/userEchos.txt
+            echo "Creating sql file to create repuser" 
             sudo echo "GRANT RELOAD, REPLICATION SLAVE ON *.* TO repuser@'172.31.42.12' IDENTIFIED BY 'Adm1n777#';" >> createRepUser.sql
             sudo echo "GRANT RELOAD, REPLICATION SLAVE ON *.* TO repuser@'172.31.42.13' IDENTIFIED BY 'Adm1n777#';" >> createRepUser.sql
             sudo echo "GRANT RELOAD, REPLICATION SLAVE ON *.* TO repuser@'172.31.42.14' IDENTIFIED BY 'Adm1n777#';" >> createRepUser.sql
-            echo "Created sql file to create repuser now running it" >> /tmp/userEchos.txt
+            echo "Created sql file to create repuser now running it" 
             sudo mariadb < createRepUser.sql
-            echo "Successfully created repuser" >> /tmp/userEchos.txt
-            echo "Start and enable MariaDB-server" >> /tmp/userEchos.txt
+            echo "Successfully created repuser" 
+            echo "Start and enable MariaDB-server" 
             sudo systemctl start mariadb
             sudo systemctl enable mariadb
-            echo "MariaDB-server started and enabled" >> /tmp/userEchos.txt
-            echo "Not running maraidb-secure-installation" >> /tmp/userEchos.txt
-            echo "Obtain position from primary database and write to a file" >> /tmp/userEchos.txt
+            echo "MariaDB-server started and enabled" 
+            echo "Not running maraidb-secure-installation" 
+            echo "Obtain position from primary database and write to a file" 
             sudo mariadb -e "show master status\G" | awk "NR==3" | awk -F ':' '{print $2}' >> /tmp/primaryPosition.txt
             sudo sed -r 's/\s+//g' /tmp/primaryPosition.txt > /tmp/primaryPos2.txt
-            echo "Creating full dump of primary" >> /tmp/userEchos.txt
+            echo "Creating full dump of primary" 
             sudo mariadb-dump --master-data=2 --all-databases --single-transaction > /tmp/fulldump.sql
-            echo "Transfering full dump and primaryPosition value of primary to replica with sshpass" >> /tmp/userEchos.txt
+            echo "Transfering full dump and primaryPosition value of primary to replica with sshpass" 
             sshpass -p "Adm1n777#" scp -qo StrictHostKeyChecking=no /tmp/fulldump.sql ec2-user@172.31.42.13:/tmp
             sshpass -p "Adm1n777#" scp -qo StrictHostKeyChecking=no /tmp/fulldump.sql ec2-user@172.31.42.14:/tmp
             sshpass -p "Adm1n777#" scp -qo StrictHostKeyChecking=no /tmp/primaryPos2.txt ec2-user@172.31.42.13:/tmp
             sshpass -p "Adm1n777#" scp -qo StrictHostKeyChecking=no /tmp/primaryPos2.txt ec2-user@172.31.42.14:/tmp
-            echo "Done transfering full dump and primaryPosition value of primary to replica" >> /tmp/userEchos.txt
-            sudo echo "Now setting up for MaxScale connectivity" >> /tmp/userEchos.txt
-            sudo echo "Creating sql file to create maxuser and appuser" >> /tmp/userEchos.txt
+            echo "Done transfering full dump and primaryPosition value of primary to replica" 
+            sudo echo "Now setting up for MaxScale connectivity" 
+            sudo echo "Creating sql file to create maxuser and appuser" 
             sudo echo "CREATE USER maxuser@'172.31.42.%' IDENTIFIED BY 'Adm1n777#';" >> /tmp/createMaxAndAppUsers.sql
             sudo echo "GRANT SUPER, RELOAD, REPLICATION CLIENT, REPLICATION SLAVE, SHOW DATABASES ON *.* TO maxuser@'172.31.42.%';" >> /tmp/createMaxAndAppUsers.sql
             sudo echo "GRANT SELECT ON mysql.db TO maxuser@'172.31.42.%';" >> /tmp/createMaxAndAppUsers.sql
@@ -176,45 +176,46 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
             #!/bin/bash
-            echo "Enable password authentication" >> /tmp/userEchos.txt
+            exec > >(tee /tmp/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+            echo "Enable password authentication" 
             sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-            echo "Change ec2-user password" >> /tmp/userEchos.txt
+            echo "Change ec2-user password" 
             echo -e "Adm1n777#\nAdm1n777#" | sudo passwd ec2-user
-            echo "Changed ec2-user password" >> /tmp/userEchos.txt
-            echo "restarting sshd" >> /tmp/userEchos.txt
+            echo "Changed ec2-user password" 
+            echo "restarting sshd" 
             sudo systemctl restart sshd
-            echo "Installing mariadb enterprise" >> /tmp/userEchos.txt
+            echo "Installing mariadb enterprise" 
             exec > >(tee /tmp/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
             yum update -y
-            echo "Updated yum" >> /tmp/userEchos.txt
-            echo "get private ip address" >> /tmp/userEchos.txt
+            echo "Updated yum" 
+            echo "get private ip address" 
             ip=$(hostname -i)
-            echo "private address is " >> /tmp/userEchos.txt
-            echo $ip  >> /tmp/userEchos.txt
-            echo "Sleeping for 4 minutes" >> /tmp/userEchos.txt
+            echo "private address is " 
+            echo $ip  
+            echo "Sleeping for 4 minutes" 
             sleep 240
-            echo "Waking up after 4 minute sleep" >> /tmp/userEchos.txt
+            echo "Waking up after 4 minute sleep" 
             sudo yum -y install wget
-            echo "Installed wget" >> /tmp/userEchos.txt
+            echo "Installed wget" 
             wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            echo "Got repo and made it executable" >> /tmp/userEchos.txt
-            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
-            echo "Installed repo, now installing MariaDB-server" >> /tmp/userEchos.txt
+            echo "Got repo and made it executable" 
+            ./mariadb_es_repo_setup --token="98926624-ae4d-44c7-a2b1-3bde91fef652" --apply --mariadb-server-version="10.6"
+            echo "Installed repo, now installing MariaDB-server" 
             sudo yum -y install MariaDB-server
-            echo "Done installing MariaDB-server, now starting it" >> /tmp/userEchos.txt
+            echo "Done installing MariaDB-server, now starting it" 
             sleep 10
             sudo systemctl start mariadb
             sudo systemctl enable mariadb
-            echo "Done installing, starting and enabling MariaDB-server and installing MariaDB-backup " >> /tmp/userEchos.txt
-            echo "Modifying mysql-clients.cnf file" >> /tmp/userEchos.txt
+            echo "Done installing, starting and enabling MariaDB-server and installing MariaDB-backup " 
+            echo "Modifying mysql-clients.cnf file" 
             sudo sed -i '4i [client]' /etc/my.cnf.d/mysql-clients.cnf
             sudo sed -i '5i password=Adm1n777#' /etc/my.cnf.d/mysql-clients.cnf
-            echo "Stopping and disabling firewalld" >> /tmp/userEchos.txt
+            echo "Stopping and disabling firewalld" 
             sudo systemctl stop firewalld
             sudo systemctl disable firewalld 
-            echo "firewalld stopped and disabled" >> /tmp/userEchos.txt
-            echo "Modifying server.cnf file" >> /tmp/userEchos.txt
+            echo "firewalld stopped and disabled" 
+            echo "Modifying server.cnf file" 
             sudo sed -i 's/\[mariadb\]//' /etc/my.cnf.d/server.cnf
             sudo echo "[mariadb]" >> /etc/my.cnf.d/server.cnf
             sudo echo "#### REPLICA 1 SERVER CONFIGURATION" >> /etc/my.cnf.d/server.cnf
@@ -225,38 +226,38 @@ Resources:
             sudo echo "log-bin-index = /var/log/mariadb/replica1-bin.index" >> /etc/my.cnf.d/server.cnf
             sudo echo "binlog_format = ROW" >> /etc/my.cnf.d/server.cnf
             sudo echo "expire_logs_days = 10" >> /etc/my.cnf.d/server.cnf
-            echo "Creating log directory and changing ownership to mysql" >> /tmp/userEchos.txt
+            echo "Creating log directory and changing ownership to mysql" 
             sudo mkdir /var/log/mariadb
             sudo chown -R mysql:mysql /var/log/mariadb
-            echo "Restarting mariadb" >> /tmp/userEchos.txt
+            echo "Restarting mariadb" 
             sudo systemctl restart mariadb
-            echo "Loading dump file from primary" >> /tmp/userEchos.txt
+            echo "Loading dump file from primary" 
             sudo mariadb < /tmp/fulldump.sql
-            echo "Get current GTID position from file sent from primary" >> /tmp/userEchos.txt
+            echo "Get current GTID position from file sent from primary" 
             currentPos=$(cat /tmp/primaryPos2.txt)
             sudo chmod 777 /tmp/userEchos.txt
-            sudo echo "currentPos is on next line and is  " >> /tmp/userEchos.txt
-            sudo cat /tmp/primaryPos2.txt >> /tmp/userEchos.txt
-            sudo echo "currentPos from var is $(cat /tmp/primaryPos2.txt) " >> /tmp/userEchos.txt
-            echo "Creating file to change master" >> /tmp/userEchos.txt
+            sudo echo "currentPos is on next line and is  " 
+            sudo cat /tmp/primaryPos2.txt 
+            sudo echo "currentPos from var is $(cat /tmp/primaryPos2.txt) " 
+            echo "Creating file to change master" 
             sudo touch /tmp/repToPrimary.sql
             sudo chmod 777 /tmp/repToPrimary.sql
             sudo echo "CHANGE MASTER TO MASTER_HOST='172.31.42.12', MASTER_USER='repuser', MASTER_PASSWORD='Adm1n777#', MASTER_LOG_FILE='primary1-bin.000001', MASTER_LOG_POS=`cat /tmp/primaryPos2.txt`;" >> /tmp/repToPrimary.sql
             sudo mariadb < /tmp/repToPrimary.sql
-            echo "Done replicating to primary now starting replica" >> /tmp/userEchos.txt
-            echo "Creating file to start replica" >> /tmp/userEchos.txt
+            echo "Done replicating to primary now starting replica" 
+            echo "Creating file to start replica" 
             sudo echo "START SLAVE;" >> /tmp/startReplica.sql
             sudo mariadb < /tmp/startReplica.sql
-            echo "Created file and started replica" >> /tmp/userEchos.txt
-            echo "Convert replica to use GTID protocol" >> /tmp/userEchos.txt
-            echo "Creating file to stop replica" >> /tmp/userEchos.txt
+            echo "Created file and started replica" 
+            echo "Convert replica to use GTID protocol" 
+            echo "Creating file to stop replica" 
             sudo echo "STOP SLAVE;" >> /tmp/stopReplica.sql
             sudo mariadb < /tmp/stopReplica.sql
             sudo echo "CHANGE MASTER TO MASTER_USE_GTID=slave_pos;" >> /tmp/changeToGTID.sql
             sudo mariadb < /tmp/changeToGTID.sql
-            echo "Starting replica" >> /tmp/userEchos.txt
+            echo "Starting replica" 
             sudo mariadb < /tmp/startReplica.sql
-            echo "DONE!" >> /tmp/userEchos.txt
+            echo "DONE!" 
 
   demoserver3:
     Type: 'AWS::EC2::Instance'
@@ -279,45 +280,46 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
             #!/bin/bash
-            echo "Enable password authentication" >> /tmp/userEchos.txt
+            exec > >(tee /tmp/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+            echo "Enable password authentication" 
             sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-            echo "Change ec2-user password" >> /tmp/userEchos.txt
+            echo "Change ec2-user password" 
             echo -e "Adm1n777#\nAdm1n777#" | sudo passwd ec2-user
-            echo "Changed ec2-user password" >> /tmp/userEchos.txt
-            echo "restarting sshd" >> /tmp/userEchos.txt
+            echo "Changed ec2-user password" 
+            echo "restarting sshd" 
             sudo systemctl restart sshd
-            echo "Installing mariadb enterprise" >> /tmp/userEchos.txt
+            echo "Installing mariadb enterprise" 
             exec > >(tee /tmp/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
             yum update -y
-            echo "Updated yum" >> /tmp/userEchos.txt
-            echo "get private ip address" >> /tmp/userEchos.txt
+            echo "Updated yum" 
+            echo "get private ip address" 
             ip=$(hostname -i)
-            echo "private address is " >> /tmp/userEchos.txt
-            echo $ip  >> /tmp/userEchos.txt
-            echo "Sleeping for 4 minutes" >> /tmp/userEchos.txt
+            echo "private address is " 
+            echo $ip  
+            echo "Sleeping for 4 minutes" 
             sleep 240
-            echo "Waking up after 4 minute sleep" >> /tmp/userEchos.txt
+            echo "Waking up after 4 minute sleep" 
             sudo yum -y install wget
-            echo "Installed wget" >> /tmp/userEchos.txt
+            echo "Installed wget" 
             wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            echo "Got repo and made it executable" >> /tmp/userEchos.txt
-            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
-            echo "Installed repo, now installing MariaDB-server" >> /tmp/userEchos.txt
+            echo "Got repo and made it executable" 
+            ./mariadb_es_repo_setup --token="98926624-ae4d-44c7-a2b1-3bde91fef652" --apply --mariadb-server-version="10.6"
+            echo "Installed repo, now installing MariaDB-server" 
             sudo yum -y install MariaDB-server
-            echo "Done installing MariaDB-server, now starting it" >> /tmp/userEchos.txt
+            echo "Done installing MariaDB-server, now starting it" 
             sleep 10
             sudo systemctl start mariadb
             sudo systemctl enable mariadb
-            echo "Done installing, starting and enabling MariaDB-server and installing MariaDB-backup " >> /tmp/userEchos.txt
-            echo "Modifying mysql-clients.cnf file" >> /tmp/userEchos.txt
+            echo "Done installing, starting and enabling MariaDB-server and installing MariaDB-backup " 
+            echo "Modifying mysql-clients.cnf file" 
             sudo sed -i '4i [client]' /etc/my.cnf.d/mysql-clients.cnf
             sudo sed -i '5i password=Adm1n777#' /etc/my.cnf.d/mysql-clients.cnf
-            echo "Stopping and disabling firewalld" >> /tmp/userEchos.txt
+            echo "Stopping and disabling firewalld" 
             sudo systemctl stop firewalld
             sudo systemctl disable firewalld 
-            echo "firewalld stopped and disabled" >> /tmp/userEchos.txt
-            echo "Modifying server.cnf file" >> /tmp/userEchos.txt
+            echo "firewalld stopped and disabled" 
+            echo "Modifying server.cnf file" 
             sudo sed -i 's/\[mariadb\]//' /etc/my.cnf.d/server.cnf
             sudo echo "[mariadb]" >> /etc/my.cnf.d/server.cnf
             sudo echo "#### REPLICA 3 SERVER CONFIGURATION" >> /etc/my.cnf.d/server.cnf
@@ -328,38 +330,38 @@ Resources:
             sudo echo "log-bin-index = /var/log/mariadb/replica2-bin.index" >> /etc/my.cnf.d/server.cnf
             sudo echo "binlog_format = ROW" >> /etc/my.cnf.d/server.cnf
             sudo echo "expire_logs_days = 10" >> /etc/my.cnf.d/server.cnf
-            echo "Creating log directory and changing ownership to mysql" >> /tmp/userEchos.txt
+            echo "Creating log directory and changing ownership to mysql" 
             sudo mkdir /var/log/mariadb
             sudo chown -R mysql:mysql /var/log/mariadb
-            echo "Restarting mariadb" >> /tmp/userEchos.txt
+            echo "Restarting mariadb" 
             sudo systemctl restart mariadb
-            echo "Loading dump file from primary" >> /tmp/userEchos.txt
+            echo "Loading dump file from primary" 
             sudo mariadb < /tmp/fulldump.sql
-            echo "Get current GTID position from file sent from primary" >> /tmp/userEchos.txt
+            echo "Get current GTID position from file sent from primary" 
             currentPos=$(cat /tmp/primaryPos2.txt)
             sudo chmod 777 /tmp/userEchos.txt
-            sudo echo "currentPos is on next line and is  " >> /tmp/userEchos.txt
-            sudo cat /tmp/primaryPos2.txt >> /tmp/userEchos.txt
-            sudo echo "currentPos from var is $(cat /tmp/primaryPos2.txt) " >> /tmp/userEchos.txt
-            echo "Creating file to change master" >> /tmp/userEchos.txt
+            sudo echo "currentPos is on next line and is  " 
+            sudo cat /tmp/primaryPos2.txt 
+            sudo echo "currentPos from var is $(cat /tmp/primaryPos2.txt) " 
+            echo "Creating file to change master" 
             sudo touch /tmp/repToPrimary.sql
             sudo chmod 777 /tmp/repToPrimary.sql
             sudo echo "CHANGE MASTER TO MASTER_HOST='172.31.42.12', MASTER_USER='repuser', MASTER_PASSWORD='Adm1n777#', MASTER_LOG_FILE='primary1-bin.000001', MASTER_LOG_POS=`cat /tmp/primaryPos2.txt`;" >> /tmp/repToPrimary.sql
             sudo mariadb < /tmp/repToPrimary.sql
-            echo "Done replicating to primary now starting replica" >> /tmp/userEchos.txt
-            echo "Creating file to start replica" >> /tmp/userEchos.txt
+            echo "Done replicating to primary now starting replica" 
+            echo "Creating file to start replica" 
             sudo echo "START SLAVE;" >> /tmp/startReplica.sql
             sudo mariadb < /tmp/startReplica.sql
-            echo "Created file and started replica" >> /tmp/userEchos.txt
-            echo "Convert replica to use GTID protocol" >> /tmp/userEchos.txt
-            echo "Creating file to stop replica" >> /tmp/userEchos.txt
+            echo "Created file and started replica" 
+            echo "Convert replica to use GTID protocol" 
+            echo "Creating file to stop replica" 
             sudo echo "STOP SLAVE;" >> /tmp/stopReplica.sql
             sudo mariadb < /tmp/stopReplica.sql
             sudo echo "CHANGE MASTER TO MASTER_USE_GTID=slave_pos;" >> /tmp/changeToGTID.sql
             sudo mariadb < /tmp/changeToGTID.sql
-            echo "Starting replica" >> /tmp/userEchos.txt
+            echo "Starting replica" 
             sudo mariadb < /tmp/startReplica.sql
-            echo "DONE!" >> /tmp/userEchos.txt
+            echo "DONE!" 
 
   demomaxscale:
     Type: 'AWS::EC2::Instance'
@@ -382,60 +384,61 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
             #!/bin/bash
-            echo "Enable password authentication" >> /tmp/userEchos.txt
-            sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-            echo "Change ec2-user password" >> /tmp/userEchos.txt
-            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd ec2-user
-            echo "Changed ec2-user password" >> /tmp/userEchos.txt
-            echo "Installing MaxScale" >> /tmp/userEchos.txt
             exec > >(tee /tmp/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-            echo "Updating yum" >> /tmp/userEchos.txt
+            echo "Enable password authentication" 
+            sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+            echo "Change ec2-user password" 
+            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd ec2-user
+            echo "Changed ec2-user password" 
+            echo "Installing MaxScale" 
+            exec > >(tee /tmp/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+            echo "Updating yum" 
             yum -y update
-            echo "Updated yum" >> /tmp/userEchos.txt
-            echo "get private ip address" >> /tmp/userEchos.txt
+            echo "Updated yum" 
+            echo "get private ip address" 
             ip=$(hostname -i)
-            echo "private address is " >> /tmp/userEchos.txt
-            echo $ip  >> /tmp/userEchos.txt
-            echo "Installing wget" >> /tmp/userEchos.txt
+            echo "private address is " 
+            echo $ip  
+            echo "Installing wget" 
             sudo yum -y install wget
-            echo "Installing git" >> /tmp/userEchos.txt
+            echo "Installing git" 
             sudo yum -y install git
-            echo "Changing to home directory and cloning mariadb-training repo" >> /tmp/userEchos.txt
+            echo "Changing to home directory and cloning mariadb-training repo" 
             cd /home/ec2-user
             sudo git clone https://github.com/mariadb-corporation/mariadb-training.git
-            echo "Downloaded git project to home directory" >> /tmp/userEchos.txt
-            echo "Download and set up MariaDB package repo with MaxScale Version 6.3.0" >> /tmp/userEchos.txt
+            echo "Downloaded git project to home directory" 
+            echo "Download and set up MariaDB package repo with MaxScale Version 6.3.0" 
             curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-maxscale-version="6.3.0"
-            echo "Install MaxScale MariaDB-client" >> /tmp/userEchos.txt
+            echo "Install MaxScale MariaDB-client" 
             yum -y install maxscale MariaDB-client
-            echo "Stopping and disabling firewalld" >> /tmp/userEchos.txt
+            echo "Stopping and disabling firewalld" 
             sudo systemctl stop firewalld
             sudo systemctl disable firewalld 
-            echo "firewalld stopped and disabled" >> /tmp/userEchos.txt
-            echo "Changing server1 IP address in maxscale config file" >> /tmp/userEchos.txt
+            echo "firewalld stopped and disabled" 
+            echo "Changing server1 IP address in maxscale config file" 
             sudo sed -i 's/127.0.0.1/172.31.42.12/g' /etc/maxscale.cnf
-            echo "Adding server2 info in maxscale config file" >> /tmp/userEchos.txt
+            echo "Adding server2 info in maxscale config file" 
             sudo echo  "[server2]" >> /etc/maxscale.cnf
             sudo echo  "type=server" >> /etc/maxscale.cnf
             sudo echo  "address=172.31.42.13" >> /etc/maxscale.cnf
             sudo echo  "port=3306" >> /etc/maxscale.cnf
             sudo echo  "protocol=MariaDBBackend" >> /etc/maxscale.cnf
-            echo "Adding server3 info in maxscale config file" >> /tmp/userEchos.txt
+            echo "Adding server3 info in maxscale config file" 
             sudo echo  "[server3]" >> /etc/maxscale.cnf
             sudo echo  "type=server" >> /etc/maxscale.cnf
             sudo echo  "address=172.31.42.14" >> /etc/maxscale.cnf
             sudo echo  "port=3306" >> /etc/maxscale.cnf
             sudo echo  "protocol=MariaDBBackend" >> /etc/maxscale.cnf
-            echo "Done adding entries to maxscale config file" >> /tmp/userEchos.txt
-            echo "Edit /etc/maxscale.cnf file" >> /tmp/userEchos.txt
+            echo "Done adding entries to maxscale config file" 
+            echo "Edit /etc/maxscale.cnf file" 
             sudo sed -i 's/servers=server1/servers=server1,server2,server3/' /etc/maxscale.cnf
             sudo sed -i 's/user=myuser/user=maxuser/' /etc/maxscale.cnf
             sudo sed -i 's/password=mypwd/password=Adm1n777#/' /etc/maxscale.cnf
             sudo sed -i 's/monitor_interval=2000/monitor_interval=5000/' /etc/maxscale.cnf
-            echo "Start and enable maxscale" >> /tmp/userEchos.txt
+            echo "Start and enable maxscale" 
             sudo systemctl start maxscale
             sudo systemctl enable maxscale
-            echo "Started and enabled maxscale" >> /tmp/userEchos.txt
+            echo "Started and enabled maxscale" 
 
   DemoSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
