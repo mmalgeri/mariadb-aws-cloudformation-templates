@@ -101,5 +101,13 @@ Set "Default"  values for all the  "Parameters" near top of template
 From a terminal a stack can be created with the following command
 ```bash
 $ cd directory_where_template_resides
-$ aws cloudformation create-stack --stack-name your-stack-name  --template-body file://primary-replicat-cluster.yaml
+$ aws cloudformation create-stack --stack-name your-stack-name  --template-body file://primary-replica-cluster.yaml
+```
+
+GIVE THE COMMAND ABOUT 15 MINUTES TO LAUNCH, DOWNLOAD SOFTWARE, AND CONFIGURE VMS
+
+To verify that the cluster is set up properly ssh into the maxscale node and type the following:
+
+```bash
+$ mxctrl status
 ```
