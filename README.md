@@ -49,17 +49,17 @@ $ clx status
 ```
 You should see something like the following output, with the "Status" field showing "OK" for each of the 3 xpand nodes
 
-Cluster Name: cl54f4c902fe1d5e9c
-Cluster Version: 5.3.13
-Cluster Status: OK
-Cluster Size: 3 nodes - 8 CPUs per Node
-Current Node: ip-10-0-2-194 - nid 1
-nid | Hostname | Status | IP Address | TPS | Used | Total
-----+----------------+--------+-------------+-----+----------------+--------
-1 | ip-10-0-2-194 | OK | 10.0.2.194 | 0 | 21.0M (0.00%) | 994.9G
-2 | ip-10-0-2-214 | OK | 10.0.2.214 | 0 | 14.6M (0.00%) | 994.9G
-3 | ip-10-0-2-26  | OK | 10.0.2.26 | 0 | 14.4M (0.00%) | 994.9G
-----+----------------+--------+-------------+-----+----------------+--------
+Cluster Name: cl54f4c902fe1d5e9c\
+Cluster Version: 5.3.13\
+Cluster Status: OK\
+Cluster Size: 3 nodes - 8 CPUs per Node\
+Current Node: ip-10-0-2-194 - nid 1\
+nid | Hostname | Status | IP Address | TPS | Used | Total\
+----+----------------+--------+-------------+-----+----------------+--------\
+1 | ip-10-0-2-194 | OK | 10.0.2.194 | 0 | 21.0M (0.00%) | 994.9G\
+2 | ip-10-0-2-214 | OK | 10.0.2.214 | 0 | 14.6M (0.00%) | 994.9G\
+3 | ip-10-0-2-26  | OK | 10.0.2.26 | 0 | 14.4M (0.00%) | 994.9G\
+----+----------------+--------+-------------+-----+----------------+--------\
 
 
 
