@@ -11,7 +11,7 @@
 
 
 ## Getting started
-Set "Default"  values for all the  "Parameters" at top of template
+Set "Default"  values for all the  "Parameters"
 
 ========================================================
 
@@ -25,4 +25,4 @@ Set "Default"  values for all the  "Parameters" at top of template
 4. Create a public/private keypair to associate to your the security groups
 
 ## Getting started
-Set "Default"  values for all the  "Parameters" at top of template
+Set "Default"  values for all the  "Parameters"
