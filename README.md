@@ -78,7 +78,7 @@ nid | Hostname | Status | IP Address | TPS | Used | Total\
 This is a template launches 4 VMs to create a 3 node cluster with one primary and two replicas and a maxscale node.
 
 The UserData bash script for each node follows the install procedure found in the mariadb documentation at\
-(https://mariadb.com/docs/deploy/topologies/primary-replica/enterprise-server-10-6/)
+https://mariadb.com/docs/deploy/topologies/primary-replica/enterprise-server-10-6/
 
 It assumes you are deploying to an existing VPC and subnet, which are specified in the "Parameters" section.
 
