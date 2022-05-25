@@ -18,9 +18,10 @@ You must also choose IP address for each of the nodes that do not conflict with 
 
 From a terminal a stack can be created with the following command
 
-$ cd *directory_where_template_resides*
+```bash
+$ cd *directory_where_template_resides*\
 $ aws cloudformation create-stack --stack-name *your-stack-name*  --template-body file://xpand-cluster.yaml
-
+```
 
 ## Getting started
 Set "Default"  values for all the  "Parameters" near top of template.
@@ -47,6 +48,7 @@ Set "Default"  values for all the  "Parameters" near top of template
 ## Launch stack
 
 From a terminal a stack can be created with the following command
-
+```bash
 $ cd *directory_where_template_resides*
 $ aws cloudformation create-stack --stack-name *your-stack-name*  --template-body file://primary-replicat-cluster.yaml
+```
