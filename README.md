@@ -18,7 +18,7 @@ You must also choose IP address for each of the nodes that do not conflict with 
 
 From a terminal a stack can be created with the following command
 ```bash
-$ cd *directory_where_template_resides*\
+$ cd directory_where_template_resides
 $ aws cloudformation create-stack --stack-name *your-stack-name*  --template-body file://xpand-cluster.yaml
 ```
 
