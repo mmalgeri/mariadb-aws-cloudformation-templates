@@ -10,8 +10,8 @@
 4. Create a public/private keypair to associate to your the security groups
 
 
-## Gettting started
-Set "Default"  values for all the  "Parameters" 
+## Getting started
+Set "Default"  values for all the  "Parameters" at top of template
 
 ========================================================
 
@@ -24,5 +24,5 @@ Set "Default"  values for all the  "Parameters"
 3. Can also set AWS_DEFAULT_REGION
 4. Create a public/private keypair to associate to your the security groups
 
-## Gettting started
-Set "Default"  values for all the  "Parameters" 
+## Getting started
+Set "Default"  values for all the  "Parameters" at top of template
