@@ -112,5 +112,17 @@ GIVE THE COMMAND ABOUT 15 MINUTES TO LAUNCH, DOWNLOAD SOFTWARE, AND CONFIGURE VM
 To verify that the cluster is set up properly ssh into the maxscale node and type the following:
 
 ```bash
-$ mxctrl status
+$ mxctrl list servers
 ```
+You should see an output like the following:\
+
+┌─────────┬──────────────┬──────┬─────────────┬─────────────────┬─────────┐\
+│ Server  │ Address      │ Port │ Connections │ State           │ GTID    │\
+├─────────┼──────────────┼──────┼─────────────┼─────────────────┼─────────┤\
+│ server1 │ 172.31.42.12 │ 3306 │ 0           │ Master, Running │ 0-1-10  │\
+├─────────┼──────────────┼──────┼─────────────┼─────────────────┼─────────┤\
+│ server2 │ 172.31.42.13 │ 3306 │ 0           │ Slave, Running  │ 0-2-126 │\
+├─────────┼──────────────┼──────┼─────────────┼─────────────────┼─────────┤\
+│ server3 │ 172.31.42.14 │ 3306 │ 0           │ Slave, Running  │ 0-3-126 │\
+└─────────┴──────────────┴──────┴─────────────┴─────────────────┴─────────┘\
+
