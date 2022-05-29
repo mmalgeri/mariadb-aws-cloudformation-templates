@@ -4,7 +4,7 @@
 
 The first is **xpand-cluster.yaml**, which launches a 3 node xpand cluster plus a maxscale node\
 The second is **primary-replica-cluster.yaml**, which launches 1 primary, 2 replicas and 1 maxscale node
-
+ 
 
 These template require some manual changes to tokens, license, etc.\
 **TBD** - Improvements can be made by storing these values outside of the template and using something like AWS code pipeline
@@ -50,7 +50,7 @@ Replace the IP address shown below with the public IP address of any one of the 
 
 http://34.207.60.148:8080 credentials are noreply@mariadb.com/mariadb
 
-To verify that the cluster is set up properly ssh into any node and type the following:
+To verify that the cluster is set up properly ssh into any xpand node and type the following:
 
 ```bash
 $ sudo su - xpand
@@ -69,6 +69,39 @@ nid | Hostname | Status | IP Address | TPS | Used | Total\
 2 | ip-10-0-2-214 | OK | 10.0.2.214 | 0 | 14.6M (0.00%) | 994.9G\
 3 | ip-10-0-2-26  | OK | 10.0.2.26 | 0 | 14.4M (0.00%) | 994.9G\
 ----+----------------+--------+-------------+-----+----------------+--------\
+
+On maxscale node type
+
+```bash
+$ sudo ls -ls /var/lib/maxscale/maxscale.cnf.d/ 
+```
+
+Expect for the following output:
+
+total 24
+4 -rw-r--r--. 1 maxscale maxscale 279 Jul 20 22:23 xpand1.cnf\
+4 -rw-r--r--. 1 maxscale maxscale 278 Jul 20 22:23 xpand2.cnf\
+4 -rw-r--r--. 1 maxscale maxscale 278 Jul 20 22:23 xpand3.cnf\
+4 -rw-r--r--. 1 maxscale maxscale 245 Jul 20 22:37 xpand_listener.cnf
+
+On maxscale node type
+
+```bash
+$ sudo maxctrl show maxscale 
+```
+
+```bash
+$ sudo maxctrl show servers 
+```
+
+```bash
+$ sudo maxctrl show monitor xpand_monitor 
+```
+
+```bash
+$ sudo maxctrl show service xpand_service 
+```
+
 
 To delete stack run the following command
 
