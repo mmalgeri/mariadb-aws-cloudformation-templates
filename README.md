@@ -5,13 +5,6 @@
 The first is **xpand-cluster.yaml**, which launches a 3 node xpand cluster plus a maxscale node\
 The second is **primary-replica-cluster.yaml**, which launches 1 primary, 2 replicas and 1 maxscale node
 
-At this time, in both templates, maxscale is configured to connect to the servers, however, it's not set up for maxscale features such as monitoring, r/w splitting ext.
-
-For those that have taken the Xpand DBA course, the instllation is complete up to and including page 19, where the user runs the following command
-
-```bash
-$ clx cmd 'date'
-```
 
 These template require some manual changes to tokens, license, etc.\
 **TBD** - Improvements can be made by storing these values outside of the template and using something like AWS code pipeline
@@ -126,7 +119,7 @@ GIVE THE COMMAND ABOUT 15 MINUTES TO LAUNCH, DOWNLOAD SOFTWARE, AND CONFIGURE VM
 To verify that the cluster is set up properly ssh into the maxscale node and type the following:
 
 ```bash
-$ mxctrl list servers
+$ maxctrl list servers
 ```
 You should see an output like the following:
 
