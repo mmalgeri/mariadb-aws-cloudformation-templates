@@ -30,7 +30,7 @@ You must also choose IP address for each of the nodes that do not conflict with 
 
 6. Search for "SET GLOBAL LICENSE" and input your license in the format show here. Note: double quotes must be preceeded with a backslash. You likely won't receive your license with these backslashes before the double quotes, so they will have to be entered manually. (NOTE: the license signature listed next won't work)
 
-            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"joe.smith@mariadb.com\",\"person\":\"Joe Smith\",\"signature\":\"302c021416184672938244358663014402144552c9f8a7f6e914d682fd48d82928383020\"}';" >> /setGlobalLicense.sql
+            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"joe.smith@mariadb.com\",\"person\":\"Joe Smith\",\"signature\":\"YOUR_GLOBAL_LICENSE\"}';" >> /setGlobalLicense.sql
 
 ## Getting started
 Set "Default"  values for all the  "Parameters" near top of template.

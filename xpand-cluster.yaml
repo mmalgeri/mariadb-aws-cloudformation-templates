@@ -96,7 +96,7 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software"
-            sudo wget https://dlm.mariadb.com/bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
+            sudo wget https://dlm.mariadb.com/YOUR_TOKEN/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
             cd /
             sudo tar xvf xpand-6.0.3.el7.tar.bz2
             cd /xpand-6.0.3.el7
@@ -106,14 +106,14 @@ Resources:
             cd /
             sudo wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            ./mariadb_es_repo_setup --token="bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f" --apply --mariadb-server-version="10.6"
+            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
             sudo yum -y install MariaDB-client
 
             sudo chmod 777 /home/xpand/.bash_profile
             sudo echo "PATH=$PATH:/opt/clustrix/bin; export PATH" >> /home/xpand/.bash_profile
 
             echo "Create setGlobalLicense.sql and move to /home/xpand directory "
-            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"michael.malgeri@mariadb.com\",\"person\":\"Michael Malgeri\",\"signature\":\"302c021416130f764a180f391ea1f598f8d544358663014402144552c9f8a7f6e914d682fd50a2c73e50c0b4efd0\"}';" >> /setGlobalLicense.sql
+            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"michael.malgeri@mariadb.com\",\"person\":\"Michael Malgeri\",\"signature\":\"YOUR_GLOBAL_LICENSE\"}';" >> /setGlobalLicense.sql
             sudo mv /setGlobalLicense.sql /home/xpand/setGlobalLicense.sql
             sudo chown xpand /home/xpand/setGlobalLicense.sql
             sudo chgrp xpand /home/xpand/setGlobalLicense.sql
@@ -247,7 +247,7 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software"
-            sudo wget https://dlm.mariadb.com/bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
+            sudo wget https://dlm.mariadb.com/YOUR_TOKEN/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
             cd /
             sudo tar xvf xpand-6.0.3.el7.tar.bz2
             cd /xpand-6.0.3.el7
@@ -257,7 +257,7 @@ Resources:
             cd /
             sudo wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            ./mariadb_es_repo_setup --token="bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f" --apply --mariadb-server-version="10.6"
+            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
             sudo yum -y install MariaDB-client
 
             sudo chmod 777 /home/xpand/.bash_profile
@@ -326,7 +326,7 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software"
-            sudo wget https://dlm.mariadb.com/bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
+            sudo wget https://dlm.mariadb.com/YOUR_TOKEN/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
             cd /
             sudo tar xvf xpand-6.0.3.el7.tar.bz2
             cd /xpand-6.0.3.el7
@@ -336,7 +336,7 @@ Resources:
             cd /
             sudo wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            ./mariadb_es_repo_setup --token="bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f" --apply --mariadb-server-version="10.6"
+            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
             sudo yum -y install MariaDB-client
 
             sudo chmod 777 /home/xpand/.bash_profile
@@ -401,7 +401,7 @@ Resources:
             cd /
             sudo wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            sudo ./mariadb_es_repo_setup --token="bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f" --apply --skip-server --skip-tools --mariadb-maxscale-version="6.3.1"
+            sudo ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --skip-server --skip-tools --mariadb-maxscale-version="6.3.1"
             sudo yum -y install maxscale
 
             # Add lines after [threads=auto]
@@ -413,10 +413,10 @@ Resources:
             sudo systemctl restart maxscale
 
 
-            echo "Add xpand nodes"
+            echo "Add xpand nodes with IP addresses of  ${xpandIp1} and ${xpandIp2} and ${xpandIp3}"
             sudo maxctrl create server xpand1 ${xpandIp1}
-            sudo maxctrl create server xpand1 ${xpandIp2}
-            sudo maxctrl create server xpand1 ${xpandIp3}
+            sudo maxctrl create server xpand2 ${xpandIp2}
+            sudo maxctrl create server xpand3 ${xpandIp3}
 
             echo "Create monitor"
             sudo maxctrl create monitor xpand_monitor xpandmon --servers xpand1 xpand2 xpand3 --monitor-user=maxscale --monitor-password='Adm1n777#'
