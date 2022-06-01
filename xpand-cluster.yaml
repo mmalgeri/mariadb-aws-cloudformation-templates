@@ -55,6 +55,10 @@ Parameters:
     Type: String
     Description: YOUR_TOKEN
     Default: bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f
+  xpandLicense:
+    Type: String
+    Description: YOUR_LICENSE
+    Default: 302c021416130f764a180f391ea1f598f8d544358663014402144552c9f8a7f6e914d682fd50a2c73e50c0b4efd0
 
 Resources:
   xpand1:
@@ -121,7 +125,8 @@ Resources:
             sudo echo "PATH=$PATH:/opt/clustrix/bin; export PATH" >> /home/xpand/.bash_profile
 
             echo "Create setGlobalLicense.sql and move to /home/xpand directory "
-            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"michael.malgeri@mariadb.com\",\"person\":\"Michael Malgeri\",\"signature\":\"302c021416130f764a180f391ea1f598f8d544358663014402144552c9f8a7f6e914d682fd50a2c73e50c0b4efd0\"}';" >> /setGlobalLicense.sql
+            echo "Setting global license number ${xpandLicense}"
+            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"michael.malgeri@mariadb.com\",\"person\":\"Michael Malgeri\",\"signature\":\"${xpandLicense}\"}';" >> /setGlobalLicense.sql
             sudo mv /setGlobalLicense.sql /home/xpand/setGlobalLicense.sql
             sudo chown xpand /home/xpand/setGlobalLicense.sql
             sudo chgrp xpand /home/xpand/setGlobalLicense.sql

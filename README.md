@@ -22,20 +22,18 @@ You must also choose IP address for each of the nodes that do not conflict with 
 2. Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN in your environment that issues aws cli commands. On MacOs these can be set in your .bash_profile file. In Windows, they are likely set as Environment variables, but not confirmed in this project yet.
 3. Can also set AWS_DEFAULT_REGION
 4. Create a public/private keypair to associate to your the security groups. Goes in ~/.ssh directory on MacOs
-5. Change YOUR_TOKEN in the Parameters section. Also put correct version if not "10.6"
 
-      e.g       ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
-
-      YOUR_TOKEN is also found in wget URLs
-
-6. Search for "SET GLOBAL LICENSE" and input your license in the format show here. Note: double quotes must be preceeded with a backslash. You likely won't receive your license with these backslashes before the double quotes, so they will have to be entered manually. (NOTE: the license signature listed next won't work)
-
-            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"joe.smith@mariadb.com\",\"person\":\"Joe Smith\",\"signature\":\"YOUR_GLOBAL_LICENSE\"}';" >> /setGlobalLicense.sql
-
-7. If you are using a different version for the xpand software, the maxscale software, or the mariadb repositories, must change the version numbers. E.g., line 103 uses xpand v6.0.3, sudo wget https://dlm.mariadb.com/YOUR_TOKEN/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2 
 
 ## Getting started
 Set "Default"  values for all the  "Parameters" near top of template.
+
+1. Change YOUR_TOKEN in the Parameters section
+2. Change YOUR_LICENSE in the Parameters section
+3. Search for "SET GLOBAL LICENSE" and input your values for "expiration", "company", "email", and "person". Maintain the \" formatting
+
+            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"joe.smith@mariadb.com\",\"person\":\"Joe Smith\",\"signature\":\"${xpandLicense\"}';" >> /setGlobalLicense.sql
+
+4. If you are using a different version for the xpand software, the maxscale software, or the mariadb repositories, must change the version numbers. E.g., line 103 uses xpand v6.0.3, sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2 . Search for other "wget" lines for versions
 
 ## Launch stack
 
