@@ -75,6 +75,10 @@ Resources:
         Fn::Base64: !Sub |
             #!/bin/bash
             exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+            echo "Change centos password" 
+            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd centos
+            
             echo "Installing Xpand software"
             yum -y update
             echo "Updated yum"
@@ -96,7 +100,7 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software"
-            sudo wget https://dlm.mariadb.com/YOUR_TOKEN/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
+            sudo wget https://dlm.mariadb.com/bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
             cd /
             sudo tar xvf xpand-6.0.3.el7.tar.bz2
             cd /xpand-6.0.3.el7
@@ -106,14 +110,14 @@ Resources:
             cd /
             sudo wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
+            ./mariadb_es_repo_setup --token="bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f" --apply --mariadb-server-version="10.6"
             sudo yum -y install MariaDB-client
 
             sudo chmod 777 /home/xpand/.bash_profile
             sudo echo "PATH=$PATH:/opt/clustrix/bin; export PATH" >> /home/xpand/.bash_profile
 
             echo "Create setGlobalLicense.sql and move to /home/xpand directory "
-            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"michael.malgeri@mariadb.com\",\"person\":\"Michael Malgeri\",\"signature\":\"YOUR_GLOBAL_LICENSE\"}';" >> /setGlobalLicense.sql
+            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"michael.malgeri@mariadb.com\",\"person\":\"Michael Malgeri\",\"signature\":\"302c021416130f764a180f391ea1f598f8d544358663014402144552c9f8a7f6e914d682fd50a2c73e50c0b4efd0\"}';" >> /setGlobalLicense.sql
             sudo mv /setGlobalLicense.sql /home/xpand/setGlobalLicense.sql
             sudo chown xpand /home/xpand/setGlobalLicense.sql
             sudo chgrp xpand /home/xpand/setGlobalLicense.sql
@@ -125,10 +129,12 @@ Resources:
             sudo mariadb < /grantToXpand.sql
             echo "Done giving proper GRANTs to xpand user"
 
-            echo "Executing command as xpand user but first change its password"
+            echo "Change xpand user password"
             echo -e "Adm1n777#\nAdm1n777#" | sudo passwd xpand
             sudo chmod 777 /home/xpand
-            echo Adm1n777# | su - xpand -c mariadb < /home/xpand/setGlobalLicense.sql
+
+            echo "Run this as sudo, not xpand user. NOT SURE IF THIS IS CORRECT"
+            sudo mariadb < /home/xpand/setGlobalLicense.sql
 
             echo "Done executing commands as xpand user"
             echo "Creating sql file for GRANTS"
@@ -169,15 +175,16 @@ Resources:
             echo "Create maxuser so that MaxScale install configuration can be completed"
 
             echo "Creating sql file for maxscale user and GRANTS"
-            echo "CREATE USER 'maxscale'@${xpandIp1} IDENTIFIED BY 'Adm1n777#';" >> /setMaxScaleUserAndGrants.sql
-            echo "GRANT SELECT ON system.membership TO 'maxscale'@${xpandIp1};" >> /setMaxScaleUserAndGrants.sql
-            echo "GRANT SELECT ON system.nodes TO 'maxscale'@${xpandIp1};" >> /setMaxScaleUserAndGrants.sql
-            echo "GRANT SELECT ON system.nodeinfo TO 'maxscale'@${xpandIp1};" >> /setMaxScaleUserAndGrants.sql
-            echo "GRANT SELECT ON system.sessions TO 'maxscale'@${xpandIp1};" >> /setMaxScaleUserAndGrants.sql
-            echo "GRANT SELECT ON system.softfiled_nodes TO 'maxscale'@${xpandIp1};" >> /setMaxScaleUserAndGrants.sql
-            echo "GRANT SELECT ON system.user_acl TO 'maxscale'@${xpandIp1};" >> /setMaxScaleUserAndGrants.sql
-            echo "GRANT SELECT ON system.users TO 'maxscale'@${xpandIp1};" >> /setMaxScaleUserAndGrants.sql
-            echo "GRANT SHOW DATABASES ON *.* TO 'maxscale'@${xpandIp1};" >> /setMaxScaleUserAndGrants.sql
+            echo "CREATE USER 'maxscale'@${DemoIpMaxScale} IDENTIFIED BY 'Adm1n777#';" >> /setMaxScaleUserAndGrants.sql
+            echo "GRANT SELECT ON system.membership TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
+            echo "GRANT SELECT ON system.nodes TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
+            echo "GRANT SELECT ON system.nodeinfo TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
+            echo "GRANT SELECT ON system.sessions TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
+            echo "GRANT SELECT ON system.softfiled_nodes TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
+            echo "GRANT SELECT ON system.user_acl TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
+            echo "GRANT SELECT ON system.users TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
+            echo "GRANT SHOW DATABASES ON *.* TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
+            echo "GRANT SUPER ON *.* TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
 
 
             sudo mv /setMaxScaleUserAndGrants.sql /home/xpand/setMaxScaleUserAndGrants.sql
@@ -186,10 +193,10 @@ Resources:
             sudo chmod +x /home/xpand/setMaxScaleUserAndGrants.sql
             echo "Moved setMaxScaleUserAndGrants.sql to /home/xpand directory and changed user/group ownership "
 
-            echo "Executing command as xpand user but first change its password"
-            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd xpand
-            sudo chmod 777 /home/xpand
-            echo Adm1n777# | su - xpand -c mariadb < /home/xpand/setMaxScaleUserAndGrants.sql
+            echo "Change file access level"
+            sudo chmod 777 /home/xpand/setMaxScaleUserAndGrants.sql
+            echo "Run this as sudo, not xpand user. NOT SURE IF THIS IS CORRECT"
+            sudo mariadb < /home/xpand/setMaxScaleUserAndGrants.sql
 
 
 
@@ -215,6 +222,10 @@ Resources:
         Fn::Base64: !Sub |
            #!/bin/bash
             exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+            echo "Change centos password" 
+            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd centos
+            
             echo "Installing Xpand software"
             yum -y update
             echo "Updated yum"
@@ -247,7 +258,7 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software"
-            sudo wget https://dlm.mariadb.com/YOUR_TOKEN/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
+            sudo wget https://dlm.mariadb.com/bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
             cd /
             sudo tar xvf xpand-6.0.3.el7.tar.bz2
             cd /xpand-6.0.3.el7
@@ -257,7 +268,7 @@ Resources:
             cd /
             sudo wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
+            ./mariadb_es_repo_setup --token="bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f" --apply --mariadb-server-version="10.6"
             sudo yum -y install MariaDB-client
 
             sudo chmod 777 /home/xpand/.bash_profile
@@ -305,6 +316,10 @@ Resources:
         Fn::Base64: !Sub |
             #!/bin/bash
             exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+            echo "Change centos password" 
+            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd centos
+            
             echo "Installing Xpand software"
             yum -y update
             echo "Updated yum"
@@ -326,7 +341,7 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software"
-            sudo wget https://dlm.mariadb.com/YOUR_TOKEN/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
+            sudo wget https://dlm.mariadb.com/bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
             cd /
             sudo tar xvf xpand-6.0.3.el7.tar.bz2
             cd /xpand-6.0.3.el7
@@ -336,7 +351,7 @@ Resources:
             cd /
             sudo wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
+            ./mariadb_es_repo_setup --token="bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f" --apply --mariadb-server-version="10.6"
             sudo yum -y install MariaDB-client
 
             sudo chmod 777 /home/xpand/.bash_profile
@@ -388,6 +403,10 @@ Resources:
         Fn::Base64: !Sub |
             #!/bin/bash
             exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+            echo "Change centos password" 
+            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd centos
+            
             echo "Installing Maxscale software"
             yum -y update
             echo "Updated yum"
@@ -401,14 +420,16 @@ Resources:
             cd /
             sudo wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
             sudo chmod +x mariadb_es_repo_setup
-            sudo ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --skip-server --skip-tools --mariadb-maxscale-version="6.3.1"
+            sudo ./mariadb_es_repo_setup --token="bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f" --apply --skip-server --skip-tools --mariadb-maxscale-version="6.3.1"
             sudo yum -y install maxscale
 
             # Add lines after [threads=auto]
             sudo awk '/threads/{print;print "admin_host=0.0.0.0";next}1' /etc/maxscale.cnf > /tmp/maxscaletmp.cnf
             sudo awk '/admin_host/{print;print "admin_secure_gui=false";next}1' /tmp/maxscaletmp.cnf > /tmp/maxscale.cnf
+
             sudo mv /tmp/maxscale.cnf /etc/maxscale.cnf
 
+            sudo sed '14,$d' /etc/maxscale.cnf
 
             sudo systemctl restart maxscale
 
@@ -426,6 +447,63 @@ Resources:
 
             echo "Create listener"
             sudo maxctrl create listener xpand_service xpand_listener 3306 --protocol=MariaDBClient
+
+            echo "Adding to /etc/maxscale.cnf file for when rebooting"
+
+            sudo echo "[xpand1]" >> /etc/maxscale.cnf
+            sudo echo "type=server" >> /etc/maxscale.cnf
+            sudo echo "address=${xpandIp1}" >> /etc/maxscale.cnf
+            sudo echo "port=3306" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+
+
+            sudo echo "[xpand2]" >> /etc/maxscale.cnf
+            sudo echo "type=server" >> /etc/maxscale.cnf
+            sudo echo "address=${xpandIp2}" >> /etc/maxscale.cnf
+            sudo echo "port=3306" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+
+
+            sudo echo "[xpand3]" >> /etc/maxscale.cnf
+            sudo echo "type=server" >> /etc/maxscale.cnf
+            sudo echo "address=${xpandIp3}" >> /etc/maxscale.cnf
+            sudo echo "port=3306" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+
+
+
+            sudo echo "[xpand_monitor]" >> /etc/maxscale.cnf
+            sudo echo "type=monitor" >> /etc/maxscale.cnf
+            sudo echo "module=xpandmon" >> /etc/maxscale.cnf
+            sudo echo "servers=xpand1,xpand2,xpand3" >> /etc/maxscale.cnf
+            sudo echo "user=maxscale" >> /etc/maxscale.cnf
+            sudo echo "password=Adm1n777#" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+
+            sudo echo "[xpand_service]" >> /etc/maxscale.cnf
+            sudo echo "type=service" >> /etc/maxscale.cnf
+            sudo echo "router=readconnroute" >> /etc/maxscale.cnf
+            sudo echo "cluster=xpand_monitor" >> /etc/maxscale.cnf
+            sudo echo "user=maxscale" >> /etc/maxscale.cnf
+            sudo echo "password=Adm1n777#" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+
+            sudo echo "[xpand_listener]" >> /etc/maxscale.cnf
+            sudo echo "type=listener" >> /etc/maxscale.cnf
+            sudo echo "service=xpand_service" >> /etc/maxscale.cnf
+            sudo echo "protocol=MariaDBClient" >> /etc/maxscale.cnf
+            sudo echo "port=3306" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+            sudo echo "" >> /etc/maxscale.cnf
+
+  
+
+            echo "Done adding to /etc/maxscale.cnf file"
 
 
 
