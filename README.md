@@ -32,6 +32,8 @@ You must also choose IP address for each of the nodes that do not conflict with 
 
             echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"joe.smith@mariadb.com\",\"person\":\"Joe Smith\",\"signature\":\"YOUR_GLOBAL_LICENSE\"}';" >> /setGlobalLicense.sql
 
+7. If you are using a different version for the xpand software, the maxscale software, or the mariadb repositories, must change the version numbers. E.g., line 103 uses xpand v6.0.3, sudo wget https://dlm.mariadb.com/YOUR_TOKEN/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2 
+
 ## Getting started
 Set "Default"  values for all the  "Parameters" near top of template.
 
