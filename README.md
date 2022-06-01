@@ -22,7 +22,7 @@ You must also choose IP address for each of the nodes that do not conflict with 
 2. Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN in your environment that issues aws cli commands. On MacOs these can be set in your .bash_profile file. In Windows, they are likely set as Environment variables, but not confirmed in this project yet.
 3. Can also set AWS_DEFAULT_REGION
 4. Create a public/private keypair to associate to your the security groups. Goes in ~/.ssh directory on MacOs
-5. Search for YOUR_TOKEN, and input YOUR_TOKEN. Also put correct version if not "10.6"
+5. Change YOUR_TOKEN in the Parameters section. Also put correct version if not "10.6"
 
       e.g       ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
 
