@@ -25,15 +25,18 @@ You must also choose IP address for each of the nodes that do not conflict with 
 
 
 ## Getting started
-Set "Default"  values for all the  "Parameters" near top of template.
+Navigate to AWS "Systems Manger" https://us-west-2.console.aws.amazon.com/systems-manager/parameters/ and set up the following parameters and YOUR VALUES:
 
-1. Change YOUR_TOKEN in the Parameters section
-2. Change YOUR_LICENSE in the Parameters section
-3. Search for "SET GLOBAL LICENSE" and input your values for "expiration", "company", "email", and "person". Maintain the \" formatting
+PARAMETER                                 SAMPLE OF YOUR VALUE
 
-            echo "SET GLOBAL LICENSE = '{\"expiration\":\"2022-07-01 16:56:47\",\"company\":\"MariaDB Internal -- do not distribute\",\"email\":\"joe.smith@mariadb.com\",\"person\":\"Joe Smith\",\"signature\":\"${xpandLicense\"}';" >> /setGlobalLicense.sql
+1. xpandLicenseCompany                    MariaDB             
+2. xpandLicenseEmail                      joe.smith@mariadb.com
+3. xpandLicenseExpiration                 2022-07-01 16:56:47
+4. xpandLicensePerson                     Joe Smith
+5. xpandLicenseSignature                  302c021416130f7234738274d9e7281cd93938371094402144552c9f8a7f6e914d682fd50a2c73e50c0b4efd0
+6. xpandToken                             bcd43212-7272-4b23-abdc-6f5b7cf7cc44
 
-4. If you are using a different version for the xpand software, the maxscale software, or the mariadb repositories, must change the version numbers. E.g., line 103 uses xpand v6.0.3, sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2 . Search for other "wget" lines for versions
+7. If you are using a different version for the xpand software, the maxscale software, or the mariadb repositories, must change the version numbers. E.g., line 103 uses xpand v6.0.3, sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2 . Search for other "wget" lines for versions. Also must change version numbers in lines that "tar," "mkdir" and "cd" on directories based on version numbers. Will fix this is next version of template using Systems Manager Parameters 
 
 ## Launch stack
 
@@ -129,15 +132,10 @@ You must also choose IP address for each of the nodes that do not conflict with 
 2. Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN in your environment that issues aws cli commands. On MacOs these can be set in your .bash_profile file. In Windows, they are likely set as Environment variables but not confirmed in this project yet.
 3. Can also set AWS_DEFAULT_REGION
 4. Create a public/private keypair to associate to your the security groups. Goes in ~/.ssh directory on MacOs
-5. Search for YOUR_TOKEN, and input YOUR_TOKEN. Also put correct version if not "10.6"
-
-      e.g       ./mariadb_es_repo_setup --token="YOUR_TOKEN" --apply --mariadb-server-version="10.6"
-
-      YOUR_TOKEN is also found in wget URLs
 
 
 ## Getting started
-Set "Default"  values for all the  "Parameters" near top of template
+Search for repo version and change to current version you are using. Will change this in next version to leverage Systems Manager Parameter(s)
 
 ## Launch stack
 

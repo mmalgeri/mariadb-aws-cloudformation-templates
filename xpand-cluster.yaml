@@ -52,29 +52,29 @@ Parameters:
     Description: Demo Xpand Ip MaxScale
     Default: 172.31.42.25
   xpandToken:
-    Type: String
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandToken>'
     Description: YOUR_TOKEN
-    Default: bd5f478a-6553-4b23-9c60-6f5b7cf7dd4f
+    Default: xpandToken
   xpandLicenseSignature:
-    Type: String
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandLicenseSignature>'
     Description: YOUR_LICENSE_SIGNATURE
-    Default: 302c021416130f764a180f391ea1f598f8d544358663014402144552c9f8a7f6e914d682fd50a2c73e50c0b4efd0
+    Default: xpandLicenseSignature
   xpandLicenseEmail:
-    Type: String
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandLicenseEmail>'
     Description: YOUR_LICENSE__EMAIL
-    Default: michael.malgeri@mariadb.com
+    Default: xpandLicenseEmail
   xpandLicensePerson:
-    Type: String
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandLicensePerson>'
     Description: YOUR_LICENSE_PERSON
-    Default: Michael Malgeri
+    Default: xpandLicensePerson
   xpandLicenseCompany:
-    Type: String
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandLicenseCompany>'
     Description: YOUR_LICENSE_COMPANY
-    Default: MariaDB Internal -- do not distribute
+    Default: xpandLicenseCompany
   xpandLicenseExpiration:
-    Type: String
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandLicenseExpiration>'
     Description: YOUR_LICENSE_EXPIRATION
-    Default: 2022-07-01 16:56:47
+    Default: xpandLicenseExpiration
 
 Resources:
   xpand1:
@@ -158,7 +158,7 @@ Resources:
             echo -e "Adm1n777#\nAdm1n777#" | sudo passwd xpand
             sudo chmod 777 /home/xpand
 
-            echo "Run this as sudo, not xpand user. NOT SURE IF THIS IS CORRECT"
+            echo "Run this as sudo, not xpand user. NOT SURE IF THIS IS CORRECT BUT SEEMS TO WORK"
             sudo mariadb < /home/xpand/setGlobalLicense.sql
 
             echo "Done executing commands as xpand user"
@@ -220,7 +220,7 @@ Resources:
 
             echo "Change file access level"
             sudo chmod 777 /home/xpand/setMaxScaleUserAndGrants.sql
-            echo "Run this as sudo, not xpand user. NOT SURE IF THIS IS CORRECT"
+            echo "Run this as sudo, not xpand user. NOT SURE IF THIS IS CORRECT BUT SEEMS TO WORK"
             sudo mariadb < /home/xpand/setMaxScaleUserAndGrants.sql
 
 
