@@ -112,7 +112,7 @@ To delete stack run the following command
 $ aws cloudformation delete-stack --stack-name *your-stack-name*
 ```
 
-You may have to reset your AWS keys in your .bash_profile or Windows environment, as the keys are replenished every few hours
+You may have to reset your AWS keys in your .bash_profile or Windows environment, as the keys may be replenished every few hours
 
 ---
 
