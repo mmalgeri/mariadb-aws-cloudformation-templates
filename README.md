@@ -35,8 +35,9 @@ PARAMETER                                 SAMPLE OF YOUR VALUE
 4. xpandLicensePerson                     Joe Smith
 5. xpandLicenseSignature                  302c021416130f7234738274d9e7281cd93938371094402144552c9f8a7f6e914d682fd50a2c73e50c0b4efd0
 6. xpandToken                             bcd43212-7272-4b23-abdc-6f5b7cf7cc44
+7. xpandPassword                          XXXXX
 
-7. If you are using a different version for the xpand software, the maxscale software, or the mariadb repositories, must change the version numbers. E.g., line 103 uses xpand v6.0.3, sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2 . Search for other "wget" lines for versions. Also must change version numbers in lines that "tar," "mkdir" and "cd" on directories based on version numbers. Will fix this is next version of template using Systems Manager Parameters 
+8. If you are using a different version for the xpand software, the maxscale software, or the mariadb repositories, must change the version numbers. E.g., line 103 uses xpand v6.0.3, sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2 . Search for other "wget" lines for versions. Also must change version numbers in lines that "tar," "mkdir" and "cd" on directories based on version numbers. Will fix this is next version of template using Systems Manager Parameters 
 
 ## Launch stack
 

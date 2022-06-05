@@ -75,6 +75,10 @@ Parameters:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandLicenseExpiration>'
     Description: YOUR_LICENSE_EXPIRATION
     Default: xpandLicenseExpiration
+  xpandPassword:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandPassword>'
+    Description: YOUR_LICENSE_EXPIRATION
+    Default: xpandPassword
 
 Resources:
   xpand1:
@@ -101,7 +105,7 @@ Resources:
             exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
             echo "Change centos password" 
-            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd centos
+            echo -e "${xpandPassword}\n${xpandPassword}" | sudo passwd centos
             
             echo "Installing Xpand software"
             yum -y update
@@ -150,12 +154,12 @@ Resources:
             echo "Moved setGlobalLicense.sql to /home/xpand directory and changed user/group ownership "
 
             echo "Create sql file to give proper GRANTs to xpand user"
-            echo "GRANT ALL ON *.* TO xpand@'localhost' IDENTIFIED BY 'Adm1n777#';" >> /grantToXpand.sql
+            echo "GRANT ALL ON *.* TO xpand@'localhost' IDENTIFIED BY '${xpandPassword}';" >> /grantToXpand.sql
             sudo mariadb < /grantToXpand.sql
             echo "Done giving proper GRANTs to xpand user"
 
             echo "Change xpand user password"
-            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd xpand
+            echo -e "${xpandPassword}\n${xpandPassword}" | sudo passwd xpand
             sudo chmod 777 /home/xpand
 
             echo "Run this as sudo, not xpand user. NOT SURE IF THIS IS CORRECT BUT SEEMS TO WORK"
@@ -163,7 +167,7 @@ Resources:
 
             echo "Done executing commands as xpand user"
             echo "Creating sql file for GRANTS"
-            echo "GRANT ALL ON *.* TO root@'localhost' IDENTIFIED BY 'Adm1n777#';" >> /setGrants.sql
+            echo "GRANT ALL ON *.* TO root@'localhost' IDENTIFIED BY '${xpandPassword}';" >> /setGrants.sql
             sudo mariadb < /setGrants.sql            
             
             echo "Added license and set GRANTS"
@@ -191,7 +195,7 @@ Resources:
             expect <<- DONE
             spawn clx pubkeyinstall
             expect "?Enter SSH*"
-            send -- "Adm1n777#\r"
+            send -- "${xpandPassword}\r"
             expect eof
             DONE'
 
@@ -200,7 +204,7 @@ Resources:
             echo "Create maxuser so that MaxScale install configuration can be completed"
 
             echo "Creating sql file for maxscale user and GRANTS"
-            echo "CREATE USER 'maxscale'@${DemoIpMaxScale} IDENTIFIED BY 'Adm1n777#';" >> /setMaxScaleUserAndGrants.sql
+            echo "CREATE USER 'maxscale'@${DemoIpMaxScale} IDENTIFIED BY '${xpandPassword}';" >> /setMaxScaleUserAndGrants.sql
             echo "GRANT SELECT ON system.membership TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
             echo "GRANT SELECT ON system.nodes TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
             echo "GRANT SELECT ON system.nodeinfo TO 'maxscale'@${DemoIpMaxScale};" >> /setMaxScaleUserAndGrants.sql
@@ -249,7 +253,7 @@ Resources:
             exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
             echo "Change centos password" 
-            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd centos
+            echo -e "${xpandPassword}\n${xpandPassword}" | sudo passwd centos
             
             echo "Installing Xpand software"
             yum -y update
@@ -300,13 +304,13 @@ Resources:
             sudo echo "PATH=$PATH:/opt/clustrix/bin; export PATH" >> /home/xpand/.bash_profile
 
             echo "Creating sql file for GRANTS"
-            echo "GRANT ALL ON *.* TO root@'localhost' IDENTIFIED BY 'Adm1n777#';" >> /setGrants.sql
+            echo "GRANT ALL ON *.* TO root@'localhost' IDENTIFIED BY '${xpandPassword}';" >> /setGrants.sql
             sudo mariadb < /setGrants.sql
             
             echo "Set GRANTS on xpand2"
 
             echo "Change xpand password"
-            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd xpand
+            echo -e "${xpandPassword}\n${xpandPassword}" | sudo passwd xpand
 
             echo "Confirm SSH daemon configuration"
             sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
@@ -343,7 +347,7 @@ Resources:
             exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
             echo "Change centos password" 
-            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd centos
+            echo -e "${xpandPassword}\n${xpandPassword}" | sudo passwd centos
             
             echo "Installing Xpand software"
             yum -y update
@@ -383,13 +387,13 @@ Resources:
             sudo echo "PATH=$PATH:/opt/clustrix/bin; export PATH" >> /home/xpand/.bash_profile
 
             echo "Creating sql file for GRANTS"
-            echo "GRANT ALL ON *.* TO root@'localhost' IDENTIFIED BY 'Adm1n777#';" >> /setGrants.sql
+            echo "GRANT ALL ON *.* TO root@'localhost' IDENTIFIED BY '${xpandPassword}';" >> /setGrants.sql
             sudo mariadb < /setGrants.sql
             
             echo "Set GRANTS on xpand3"
 
             echo "Change xpand password"
-            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd xpand
+            echo -e "${xpandPassword}\n${xpandPassword}" | sudo passwd xpand
 
             echo "Confirm SSH daemon configuration"
             sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
@@ -430,7 +434,7 @@ Resources:
             exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
             echo "Change centos password" 
-            echo -e "Adm1n777#\nAdm1n777#" | sudo passwd centos
+            echo -e "${xpandPassword}\n${xpandPassword}" | sudo passwd centos
             
             echo "Installing Maxscale software"
             yum -y update
@@ -465,10 +469,10 @@ Resources:
             sudo maxctrl create server xpand3 ${xpandIp3}
 
             echo "Create monitor"
-            sudo maxctrl create monitor xpand_monitor xpandmon --servers xpand1 xpand2 xpand3 --monitor-user=maxscale --monitor-password='Adm1n777#'
+            sudo maxctrl create monitor xpand_monitor xpandmon --servers xpand1 xpand2 xpand3 --monitor-user=maxscale --monitor-password='${xpandPassword}'
 
             echo "Create R/W splitter"
-            sudo maxctrl create service xpand_service readwritesplit user=maxscale password='Adm1n777#' --servers xpand1 xpand2 xpand3
+            sudo maxctrl create service xpand_service readwritesplit user=maxscale password='${xpandPassword}' --servers xpand1 xpand2 xpand3
 
             echo "Create listener"
             sudo maxctrl create listener xpand_service xpand_listener 3306 --protocol=MariaDBClient
@@ -523,7 +527,7 @@ Resources:
             sudo echo "module=xpandmon" >> /tmp/maxscale.cnf
             sudo echo "servers=xpand1,xpand2,xpand3" >> /tmp/maxscale.cnf
             sudo echo "user=maxscale" >> /tmp/maxscale.cnf
-            sudo echo "password=Adm1n777#" >> /tmp/maxscale.cnf
+            sudo echo "password=${xpandPassword}" >> /tmp/maxscale.cnf
             sudo echo "" >> /tmp/maxscale.cnf
             sudo echo "" >> /tmp/maxscale.cnf
 
@@ -532,7 +536,7 @@ Resources:
             sudo echo "router=readconnroute" >> /tmp/maxscale.cnf
             sudo echo "cluster=xpand_monitor" >> /tmp/maxscale.cnf
             sudo echo "user=maxscale" >> /tmp/maxscale.cnf
-            sudo echo "password=Adm1n777#" >> /tmp/maxscale.cnf
+            sudo echo "password=${xpandPassword}" >> /tmp/maxscale.cnf
             sudo echo "" >> /tmp/maxscale.cnf
             sudo echo "" >> /tmp/maxscale.cnf
 
