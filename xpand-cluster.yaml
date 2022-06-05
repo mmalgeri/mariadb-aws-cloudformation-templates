@@ -77,8 +77,16 @@ Parameters:
     Default: xpandLicenseExpiration
   xpandPassword:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandPassword>'
-    Description: YOUR_LICENSE_EXPIRATION
+    Description: YOUR_PASSWORD
     Default: xpandPassword
+  xpandVersion:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandVersion>'
+    Description: YOUR_XPAND_VERSION
+    Default: xpandVersion
+  xpandVersionDir:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::xpandVersionDir>'
+    Description: YOUR_XPAND_VERSION_DIR
+    Default: xpandVersionDir
 
 Resources:
   xpand1:
@@ -128,10 +136,10 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software"
-            sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
+            sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/${xpandVersionDir}/${xpandVersion}.tar.bz2
             cd /
-            sudo tar xvf xpand-6.0.3.el7.tar.bz2
-            cd /xpand-6.0.3.el7
+            sudo tar xvf ${xpandVersion}.tar.bz2
+            cd /${xpandVersion}
             sudo ./xpdnode_install.py -y
             echo "Done running python install script. Can test GUI on port 8080"
             echo "Now get mariadb repo"
@@ -287,10 +295,10 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software with token ${xpandToken}"
-            sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
+            sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/${xpandVersionDir}/${xpandVersion}.tar.bz2
             cd /
-            sudo tar xvf xpand-6.0.3.el7.tar.bz2
-            cd /xpand-6.0.3.el7
+            sudo tar xvf ${xpandVersion}.tar.bz2
+            cd /${xpandVersion}
             sudo ./xpdnode_install.py -y
             echo "Done running python install script. Can test GUI on port 8080"
             echo "Now get mariadb repo"
@@ -370,10 +378,10 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software"
-            sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/xpand-6.0.3/xpand-6.0.3.el7.tar.bz2
+            sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/${xpandVersionDir}/${xpandVersion}.tar.bz2
             cd /
-            sudo tar xvf xpand-6.0.3.el7.tar.bz2
-            cd /xpand-6.0.3.el7
+            sudo tar xvf ${xpandVersion}.tar.bz2
+            cd /${xpandVersion}
             sudo ./xpdnode_install.py -y
             echo "Done running python install script. Can test GUI on port 8080"
             echo "Now get mariadb repo"
