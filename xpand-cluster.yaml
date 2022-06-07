@@ -181,7 +181,7 @@ Resources:
             echo "Added license and set GRANTS"
 
             sudo echo "Creating sql file to add remaining nodes to cluster"
-            sudo echo "ALTER CLUSTER ADD '172.31.42.23', '172.31.42.24';" >> /addNodesToCluster.sql
+            sudo echo "ALTER CLUSTER ADD '${xpandIp2}', '${xpandIp3}';" >> /addNodesToCluster.sql
             sudo mariadb < /addNodesToCluster.sql
             echo "Added remaining nodes to cluster from xpand1"
 
