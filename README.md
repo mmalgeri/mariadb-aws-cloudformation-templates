@@ -1,9 +1,10 @@
 # mariadb-aws-cloudformation-templates
 
-### Two templates are presented
+### Three templates are presented
 
 The first is **xpand-cluster.yaml**, which launches a 3 node xpand cluster plus a maxscale node\
-The second is **primary-replica-cluster.yaml**, which launches 1 primary, 2 replicas and 1 maxscale node
+The second is **xpand-one-node.yaml**, which is a single xpand node that can be added or removed from the cluster in a demo\
+The third is **primary-replica-cluster.yaml**, which launches 1 primary, 2 replicas and 1 maxscale node
  
 
 These template require some manual changes to tokens, license, etc.\
