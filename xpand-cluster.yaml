@@ -4,9 +4,9 @@ Description: Template to Create an EC2 instance in a VPC
 Parameters:
 
   ImageId:
-    Type: String
-    Description: 'CentOS 7 (x86_64) - with Updates HVM for US-west2 Region with cloud-init to recognize UserData'
-    Default: 'ami-0a531e5afd4d5f3ad'
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::ImageId>'
+    Description: YOUR_IMAGE_ID
+    Default: ImageId
   VpcId:
     Type: String
     Description: VPC id
@@ -28,9 +28,9 @@ Parameters:
     Description: SSH Keypair to login to the instance
     Default: mmalgeri777-keypair-mdb
   MyIp:
-    Type: String
-    Description: MyIp Address
-    Default: 66.27.107.185/32
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::MyIp>'
+    Description: MY_IP
+    Default: MyIp
   XpandIpRange:
     Type: String
     Description: Xpand Ip Range
