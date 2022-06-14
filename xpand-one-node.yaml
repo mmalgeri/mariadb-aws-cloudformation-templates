@@ -3,10 +3,10 @@ Description: Template to Create an EC2 instance in a VPC
    
 Parameters:
 
-  ImageId:
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::ImageId>'
+  ImageIdXpand:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::ImageIdXpand>'
     Description: YOUR_IMAGE_ID
-    Default: ImageId
+    Default: ImageIdXpand
   VpcId:
     Type: String
     Description: VPC id
@@ -81,7 +81,7 @@ Resources:
   xpand7:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIdXpand
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName

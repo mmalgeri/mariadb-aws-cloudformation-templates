@@ -3,10 +3,10 @@ Description: Template to Create an EC2 instance in a VPC
    
 Parameters:
 
-  ImageId:
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::ImageId>'
+  ImageIdXpand:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::ImageIdXpand>'
     Description: YOUR_IMAGE_ID
-    Default: ImageId
+    Default: ImageIdXpand
   VpcId:
     Type: String
     Description: VPC id
@@ -92,7 +92,7 @@ Resources:
   xpand1:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIdXpand
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName
@@ -136,8 +136,8 @@ Resources:
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
             echo "Getting xpand software"
+            sudo cd /
             sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/${xpandVersionDir}/${xpandVersion}.tar.bz2
-            cd /
             sudo tar xvf ${xpandVersion}.tar.bz2
             cd /${xpandVersion}
             sudo ./xpdnode_install.py -y
@@ -240,7 +240,7 @@ Resources:
   xpand2:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIdXpand
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName
@@ -294,7 +294,7 @@ Resources:
             sudo systemctl start ntpd
             echo "Done creating raid devices, filesystem, data directory, and mounting"
             echo "Also started ntpd"
-            echo "Getting xpand software with token ${xpandToken}"
+            echo "Getting xpand software"
             sudo wget https://dlm.mariadb.com/${xpandToken}/xpand/${xpandVersionDir}/${xpandVersion}.tar.bz2
             cd /
             sudo tar xvf ${xpandVersion}.tar.bz2
@@ -334,7 +334,7 @@ Resources:
   xpand3:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIdXpand
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName
@@ -421,7 +421,7 @@ Resources:
   demomaxscale:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIdXpand
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName
