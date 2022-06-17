@@ -1,20 +1,11 @@
 # mariadb-aws-cloudformation-templates
 
-### Three templates are presented
+### Four templates are presented
 
 The first is **xpand-cluster.yaml**, which launches a 3 node xpand cluster plus a maxscale node\
-The second is **xpand-one-node.yaml**, which is a single xpand node that can be added or removed from the cluster in a demo\
-The third is **primary-replica-cluster.yaml**, which launches 1 primary, 2 replicas and 1 maxscale node
- 
-**TBD** - Improvements can be made by using something like AWS code pipeline
-
-# xpand-cluster.yaml
-
-This template launches 4 VMs to create a 3 node xpand cluster with on maxscale node. 
-
-It assumes you are deploying to an existing VPC and subnet, which are specified in the "Parameters" section.
-
-You must also choose IP address for each of the nodes that do not conflict with existing nodes on the subnet.
+The second is **primary-replica-cluster.yaml**, which launches 1 primary, 2 replicas and 1 maxscale node\
+The third is **xpand-one-node.yaml**, which is a single xpand node that can be added or removed from the cluster in a demo\
+The fourth is **mariadb-one-node.yaml**, which launches mariadb server, which can be added to the primary-replica cluster\
 
 ## Prerequisites
 1. Install aws cli tools
@@ -22,11 +13,19 @@ You must also choose IP address for each of the nodes that do not conflict with 
 3. Can also set AWS_DEFAULT_REGION
 4. Create a public/private keypair to associate to your the security groups. Goes in ~/.ssh directory on MacOs
 
+# xpand-cluster.yaml
+
+This template launches 4 VMs to create a 3 node xpand cluster with on maxscale node. 
+
+It assumes you are deploying to an existing VPC and subnet, which are specified in the "Parameters" section.
+
+You must also choose IP address for each of the nodes that do not conflict with existing nodes on the subnet
+
 
 ## Getting started
 Navigate to AWS "Systems Manger" https://us-west-2.console.aws.amazon.com/systems-manager/parameters/ and set up the following parameters and YOUR VALUES:
 
-PARAMETER                                 SAMPLE OF YOUR VALUE
+**PARAMETER**                                 **SAMPLE OF YOUR VALUE**
 
 1. xpandLicenseCompany                    MariaDB             
 2. xpandLicenseEmail                      joe.smith@mariadb.com
@@ -37,6 +36,7 @@ PARAMETER                                 SAMPLE OF YOUR VALUE
 7. xpandPassword                          XXXXX
 8. xpandVersion                           xpand-6.0.3.el7
 9. xpandVersionDir                        xpand-6.0.3
+10. ImageIdXpand                          ami-0a531e5afd4d5f3ad
 
 Troubleshooting tip: Check version #s in "wget" lines, tar commands, and directories that are created based on software version
 
@@ -129,15 +129,18 @@ It assumes you are deploying to an existing VPC and subnet, which are specified 
 
 You must also choose IP address for each of the nodes that do not conflict with existing nodes on the subnet
 
-## Prerequisites
-1. Install aws cli tools
-2. Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN in your environment that issues aws cli commands. On MacOs these can be set in your .bash_profile file. In Windows, they are likely set as Environment variables but not confirmed in this project yet.
-3. Can also set AWS_DEFAULT_REGION
-4. Create a public/private keypair to associate to your the security groups. Goes in ~/.ssh directory on MacOs
-
-
 ## Getting started
-Search for repo version and change to current version you are using. Will change this in next version to leverage Systems Manager Parameter(s)
+Navigate to AWS "Systems Manger" https://us-west-2.console.aws.amazon.com/systems-manager/parameters/ and set up the following parameters and YOUR VALUES:
+
+**PARAMETER**                                 **SAMPLE OF YOUR VALUE**
+
+1. ImageIdPriRep                              ami-0b28dfc7adc325ef4            
+2. primaryReplicaMaxScaleUserNetwork          72.31.42.%
+3. primaryReplicaMaxScaleVersion              6.3.0
+4. primaryReplicaPassword                     XXXXX
+5. primaryReplicaToken                        98926624-ba64-5522-1111-3bde91fef652
+6. primaryReplicaVersion                      10.6
+
 
 ## Launch stack
 
@@ -174,3 +177,22 @@ $ aws cloudformation delete-stack --stack-name *your-stack-name*
 
 You may have to reset your AWS keys in your .bash_profile or Windows environment, as the keys are replenished every few hours
 
+# xpand-one-node.yaml.yaml
+
+## Launch stack
+
+From a terminal a stack can be created with the following command
+```bash
+$ cd directory_where_template_resides
+$ aws cloudformation create-stack --stack-name your-stack-name  --template-body file://xpand-one-node.yaml
+```
+
+# mariadb-one-node.yaml.yaml
+
+## Launch stack
+
+From a terminal a stack can be created with the following command
+```bash
+$ cd directory_where_template_resides
+$ aws cloudformation create-stack --stack-name your-stack-name  --template-body file://mariadb-one-node.yaml
+```
