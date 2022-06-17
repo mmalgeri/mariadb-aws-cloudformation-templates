@@ -3,10 +3,10 @@ Description: Template to Create an EC2 instance in a VPC
    
 Parameters:
 
-  ImageId:
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::ImageId>'
+  ImageIdPriRep:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::ImageIdPriRep>'
     Description: YOUR_IMAGE_ID
-    Default: ImageId
+    Default: ImageIdPriRep
   VpcId:
     Type: String
     Description: VPC id
@@ -76,7 +76,7 @@ Resources:
   demoserver1:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIdPriRep
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName
@@ -178,7 +178,7 @@ Resources:
   demoserver2:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIdPriRep
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName
@@ -282,7 +282,7 @@ Resources:
   demoserver3:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIdPriRep
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName
@@ -386,7 +386,7 @@ Resources:
   demomaxscale:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIdPriRep
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName
