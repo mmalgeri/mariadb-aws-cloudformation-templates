@@ -3,10 +3,10 @@ Description: Template to Create an EC2 instance in a VPC
    
 Parameters:
 
-  ImageId:
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::ImageId>'
+  ImageIDLinux:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::ImageIDLinux>'
     Description: YOUR_IMAGE_ID
-    Default: ImageId
+    Default: ImageIDLinux
   VpcId:
     Type: String
     Description: VPC id
@@ -46,10 +46,10 @@ Parameters:
   
 
 Resources:
-  demoserver1:
+  linux1:
     Type: 'AWS::EC2::Instance'
     Properties: 
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageIDLinux
       InstanceType: !Ref InstanceType
       AvailabilityZone: !Ref AvailabilityZone
       KeyName: !Ref KeyName
@@ -63,7 +63,7 @@ Resources:
             - !Ref DemoHttpSecurityGroup
       Tags:
             - Key: Name
-              Value: demoserver1
+              Value: linux1
       UserData:
         Fn::Base64: !Sub |
             #!/bin/bash
@@ -94,6 +94,12 @@ Resources:
             echo "Download and install eksctl" 
             sudo curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             sudo mv /tmp/eksctl /usr/local/bin
+
+            echo "Install http web server" 
+            sudo yum install -y httpd # install web server 
+            sudo systemctl start httpd
+            sudo systemctl enable httpd
+            sudo echo "Hello World" > /var/www/html/mainPage.html
 
             
 
@@ -137,4 +143,4 @@ Resources:
 Outputs:
   DemoInstanceId:
     Description: Instance Id 
-    Value: !Ref demoserver1
+    Value: !Ref linux1
